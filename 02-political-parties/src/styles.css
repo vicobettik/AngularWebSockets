@@ -1,0 +1,10 @@
+html, body{
+  margin:0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #303030;
+  color: white;
+  max-width: 1200px;
+
+}
