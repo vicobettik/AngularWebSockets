@@ -1,12 +1,15 @@
-import { Component, computed, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { BarChart } from "../../components/bar-chart/bar-chart";
 import { ChartForm } from "../../components/chart-form/chart-form";
 import { WebSocketConnectionService } from '../../../web-sockets/services/WebSocketConnection.service';
 import { Subscription } from 'rxjs';
+import { Party } from '../../../types';
+import { JsonPipe } from '@angular/common';
+import { ChartData } from 'chart.js';
 
 @Component({
   selector: 'app-chart-page',
-  imports: [BarChart, ChartForm],
+  imports: [BarChart, ChartForm, JsonPipe],
   templateUrl: './chart-page.html',
   styleUrl: './chart-page.css',
 })
@@ -15,20 +18,36 @@ export class ChartPage implements OnInit, OnDestroy{
   public webSocketService = inject(WebSocketConnectionService);
   public onMessageSuscription:Subscription|null = null;
 
-  chartData = computed(() => ({
-    labels:['l1','l2','l3','l4'],
+  protected parties = signal<Party[]>([]);
+
+  protected chartData = computed<ChartData<'bar'>>(() => ({
+    labels: this.parties().map((party) => party.name),
     datasets:[
       {
         label:'votos',
-        backgroundColor: ['yellow', 'green', 'red', 'orange'],
-        data: [1,2,3,1]
+        backgroundColor: this.parties().map((party) => party.color),
+        boderColor: this.parties().map((party) => party.borderColor),
+        borderWith: 3,
+        borderRadius: 10,
+        data: this.parties().map((party) => party.votes)
       }
     ]
   }));
 
   ngOnInit(): void {
     this.onMessageSuscription = this.webSocketService.onMessage.subscribe((message) => {
-      console.log(message);
+      console.log({message});
+      const {type,payload} = message;
+
+      switch (type) {
+        case 'PARTIES_LIST':
+          this.parties.set(payload);
+          console.log(this.parties())
+          break;
+
+        default:
+          break;
+      }
     })
   };
 

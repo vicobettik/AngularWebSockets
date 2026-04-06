@@ -11,9 +11,9 @@
   <hr class="party-config__divider" />
 
   <ul class="party-config__list" aria-label="Parties">
-    <chart-form-row />
-    <chart-form-row />
-    <chart-form-row />
-    <chart-form-row />
+    @for (party of parties(); track party.id) {
+
+      <chart-form-row [party]="party"/>
+    }
   </ul>
 </section>

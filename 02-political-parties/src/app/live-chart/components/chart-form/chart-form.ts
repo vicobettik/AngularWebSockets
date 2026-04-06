@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ChartFormRow } from "../chart-form-row/chart-form-row";
+import { Party } from '../../../types';
 
 @Component({
   selector: 'chart-form',
@@ -7,4 +8,8 @@ import { ChartFormRow } from "../chart-form-row/chart-form-row";
   templateUrl: './chart-form.html',
   styleUrl: './chart-form.css',
 })
-export class ChartForm { }
+export class ChartForm {
+
+  parties = input.required<Party[]>();
+
+}

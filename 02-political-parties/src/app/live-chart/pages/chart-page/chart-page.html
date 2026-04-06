@@ -2,10 +2,14 @@
 
 <small>{{webSocketService.connectionStatus()}}</small>
 
-
 <!-- chart -->
-<bar-chart [chartData]="chartData()"/>
+@if (parties().length > 0) {
+  <bar-chart [chartData]="chartData()"/>
+}
+@else {
+  <p>No hay partidos políticos</p>
+}
 
 
 <!-- crud -->
- <chart-form />
+ <chart-form [parties]="parties()"/>
