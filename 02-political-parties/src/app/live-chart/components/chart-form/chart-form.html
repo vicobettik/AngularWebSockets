@@ -12,8 +12,13 @@
 
   <ul class="party-config__list" aria-label="Parties">
     @for (party of parties(); track party.id) {
-
-      <chart-form-row [party]="party"/>
+      <chart-form-row
+        [party]="party"
+        (incrementVotes)="incrementVotes($event)"
+        (decrementVotes)="decrementVotes($event)"
+        (deleteParty)="deleteParty($event)"
+        (updateParty)="updateParty($event)"
+      />
     }
   </ul>
 </section>

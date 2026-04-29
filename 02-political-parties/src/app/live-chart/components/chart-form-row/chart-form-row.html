@@ -6,20 +6,20 @@
     aria-label="Select Partido Rojo"
   />
 
-  <input class="party-row__name" type="text" [value]="party().name" aria-label="Party name" />
+  <input class="party-row__name" type="text" [value]="party().name" aria-label="Party name" (input)="updatePartyAction($event.target.value)"/>
 
   <div class="party-row__controls" aria-label="Party value controls">
-    <button class="party-row__control-button" type="button" aria-label="Decrease value">
+    <button class="party-row__control-button" type="button" aria-label="Decrease value" (click)="decrementVotesAction()">
       <span aria-hidden="true">−</span>
     </button>
 
     <span class="party-row__value" aria-label="Current value">{{party().votes}}</span>
 
-    <button class="party-row__control-button" type="button" aria-label="Increase value">
+    <button class="party-row__control-button" type="button" aria-label="Increase value" (click)="incrementVotesAction()">
       <span aria-hidden="true">+</span>
     </button>
 
-    <button class="party-row__delete-button" type="button" aria-label="Delete party">
+    <button class="party-row__delete-button" type="button" aria-label="Delete party" (click)="deletePartyAction()">
       <span aria-hidden="true">×</span>
     </button>
   </div>
