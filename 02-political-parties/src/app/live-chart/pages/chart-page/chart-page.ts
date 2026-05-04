@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { BarChart } from '../../components/bar-chart/bar-chart';
 import { ChartForm } from '../../components/chart-form/chart-form';
 import { WebSocketConnectionService } from '../../../web-sockets/services/WebSocketConnection.service';
@@ -33,6 +33,7 @@ export class ChartPage implements OnInit, OnDestroy {
     ],
   }));
 
+
   ngOnInit(): void {
     this.onMessageSuscription = this.webSocketService.onMessage.subscribe((message) => {
       console.log({ message });
@@ -43,6 +44,7 @@ export class ChartPage implements OnInit, OnDestroy {
           this.parties.set(payload);
           console.log(this.parties());
           break;
+
         case 'VOTES_UPDATED':
           this.parties.update(
             (parties) => parties.map(
@@ -57,6 +59,12 @@ export class ChartPage implements OnInit, OnDestroy {
               )
             )
           break;
+
+          case 'PARTY_ADDED':
+            this.parties.update(
+              (parties) => [...parties, payload]
+            );
+            break;
 
         default:
           break;

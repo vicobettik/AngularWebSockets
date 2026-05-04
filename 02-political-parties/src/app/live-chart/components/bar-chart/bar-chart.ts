@@ -1,4 +1,4 @@
-import { Component, ElementRef, input, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, input, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { Chart, ChartData } from 'chart.js';
 
 @Component({
@@ -11,6 +11,16 @@ export class BarChart implements OnInit, OnDestroy {
   private readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('chart');
   chartData = input.required<ChartData<'bar'>>();
   chartInstance: Chart | null = null;
+
+  private updateChartData = effect(() => {
+    if (!this.chartInstance) {
+      return;
+    }
+
+    this.chartInstance.data = this.chartData();
+    this.chartInstance.update();
+
+  })
 
   ngOnDestroy(): void {
     this.chartInstance?.destroy();
@@ -27,8 +37,12 @@ export class BarChart implements OnInit, OnDestroy {
 
     this.chartInstance = new Chart(canvas, {
       type: 'bar',
+
       data: this.chartData(),
       options: {
+        animation: {
+          duration:0
+        },
         plugins: {
           legend: {
             display: false,

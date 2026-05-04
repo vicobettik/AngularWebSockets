@@ -42,15 +42,11 @@ export class ChartForm {
   updateParty(party: Party) {
     const message:ClientMessage = {
       type:'UPDATE_PARTY',
-      payload:{
-        id:party.id,
-        name: party.name,
-        borderColor: party.borderColor,
-        color: party.color,
-        votes: party.votes
-      }
+      payload: party
     };
+    this.webSocketService.sendMessage(message);
   }
+
   deleteParty(party: Party) {
     const message:ClientMessage = {
       type:'DELETE_PARTY',
@@ -62,4 +58,26 @@ export class ChartForm {
     this.webSocketService.sendMessage(message);
 
   }
+
+  addParty(){
+    const message:ClientMessage = {
+      type: 'ADD_PARTY',
+      payload: {
+        name:'Nuevo partido',
+        color: this.getRandomColor(),
+        borderColor: this.getRandomColor(),
+        votes: 10
+      }
+
+    }
+
+    this.webSocketService.sendMessage(message);
+  }
+
+  private getRandomColor(){
+    return (
+      `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6,'0')}`
+    );
+  }
+
 }
